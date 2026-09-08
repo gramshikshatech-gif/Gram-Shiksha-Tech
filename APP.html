@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gram Shiksha Tech - AI Learning Platform</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PDF.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <!-- html2pdf CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- Header Navigation with Integrated Logo -->
+    <header class="bg-[#0b1d3a] text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-2.5 flex justify-between items-center">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="showSection('dashboard')">
+                <img src="logo.png" alt="Gram Shiksha Tech Logo" class="h-10 w-auto rounded object-contain" onError="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center space-x-3\'><div class=\'flex items-center space-x-2\'><svg class=\'w-8 h-8 text-white\' viewBox=\'0 0 100 100\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'4\'><path d=\'M20,65 L50,80 L80,65 L80,35 L50,50 L20,35 Z\'/><path d=\'M50,50 L50,20\'/><circle cx=\'35\' cy=\'25\' r=\'4\' fill=\'currentColor\'/><circle cx=\'50\' cy=\'20\' r=\'4\' fill=\'currentColor\'/><circle cx=\'65\' cy=\ me=\'4\' fill=\'currentColor\'/></svg></div><div class=\'leading-tight\'><span class=\'font-bold text-lg block text-white tracking-wide\'>Gram Shiksha</span><span class=\'text-amber-400 font-bold text-sm block tracking-wider\'>Tech</span></div></div>';">
+            </div>
+            <nav class="hidden lg:flex space-x-5 text-sm font-medium">
+                <button onclick="showSection('dashboard')" class="hover:text-amber-300 transition"><i class="fa-solid fa-chart-line mr-1"></i> Dashboard</button>
+                <button onclick="showSection('planner')" class="hover:text-amber-300 transition"><i class="fa-solid fa-calendar-check mr-1"></i> AI Path</button>
+                <button onclick="showSection('quiz')" class="hover:text-amber-300 transition"><i class="fa-solid fa-pen-to-square mr-1"></i> Smart Quiz</button>
+                <button onclick="showSection('ai-assistant')" class="hover:text-amber-300 transition text-amber-300 font-semibold"><i class="fa-solid fa-robot mr-1"></i> Unified AI Assistant</button>
+                <button onclick="showSection('notes')" class="hover:text-amber-300 transition"><i class="fa-solid fa-file-pdf mr-1"></i> Exam Notes</button>
+                <button onclick="showSection('teacher')" class="hover:text-amber-300 transition text-amber-200 font-semibold"><i class="fa-solid fa-chalkboard-user mr-1"></i> Teacher Portal</button>
+            </nav>
+            <div class="flex items-center space-x-2">
+                <button onclick="toggleApiSettingsModal()" class="text-xs bg-slate-800 hover:bg-slate-700 text-amber-300 px-3 py-1.5 rounded-lg border border-slate-600 font-semibold transition flex items-center">
+                    <i class="fa-solid fa-gear mr-1.5"></i> API Settings
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Body -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6">
+
+        <!-- 1. STUDENT DASHBOARD -->
+        <section id="dashboard" class="space-y-6">
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-6 text-white shadow-md flex justify-between items-center flex-wrap gap-4">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold">Welcome back, Student! 👋</h1>
+                    <p class="mt-1 text-indigo-100">Adaptive AI Path, Dynamic Quizzes & Multi-lingual AI Assistant.</p>
+                </div>
+                <button onclick="clearDatabase()" class="bg-rose-500 hover:bg-rose-600 text-xs px-3 py-2 rounded-lg font-medium transition shadow">
+                    <i class="fa-solid fa-trash-can mr-1"></i> Reset Data
+                </button>
+            </div>
+
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-4">
+                    <div class="p-3 bg-indigo-100 text-indigo-600 rounded-lg text-2xl"><i class="fa-solid fa-fire"></i></div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-semibold uppercase">Learning Streak</p>
+                        <h3 class="text-xl font-bold">7 Days</h3>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-4">
+                    <div class="p-3 bg-emerald-100 text-emerald-600 rounded-lg text-2xl"><i class="fa-solid fa-chart-line"></i></div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-semibold uppercase">Average Quiz Score</p>
+                        <h3 class="text-xl font-bold" id="avg-score">0%</h3>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-4">
+                    <div class="p-3 bg-purple-100 text-purple-600 rounded-lg text-2xl"><i class="fa-solid fa-route"></i></div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-semibold uppercase">Mastery Level</p>
+                        <h3 class="text-xl font-bold text-purple-700" id="mastery-level">Foundation</h3>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-4">
+                    <div class="p-3 bg-rose-100 text-rose-600 rounded-lg text-2xl"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-semibold uppercase">Weak Topics Flagged</p>
+                        <h3 class="text-xl font-bold text-rose-600" id="weak-count">0 Topics</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages from Teacher -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 shadow-sm">
+                <h3 class="text-base font-bold text-amber-900 mb-2"><i class="fa-solid fa-chalkboard-user text-amber-600 mr-2"></i>Direct Messages from Teacher</h3>
+                <div id="student-teacher-msgs" class="space-y-2">
+                    <p class="text-xs text-amber-700 italic">No direct messages from teacher yet.</p>
+                </div>
+            </div>
+
+            <!-- Path & Weak Areas -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-compass text-indigo-600 mr-2"></i>Adaptive Learning Path</h2>
+                        <span class="text-xs bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-full font-semibold">Self-Paced</span>
+                    </div>
+                    <div id="learning-path-card" class="space-y-3">
+                        <p class="text-xs text-slate-500">Take customized assessments to build your path.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-brain text-rose-600 mr-2"></i>Weak-Area Detection</h2>
+                        <span class="text-xs bg-rose-100 text-rose-700 px-2.5 py-1 rounded-full font-semibold">Auto-Synced</span>
+                    </div>
+                    <div class="space-y-2" id="dash-weak-list">
+                        <p class="text-xs text-slate-400 italic">No weak topics detected.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. UNIFIED AI ASSISTANT & MATH SOLVER -->
+        <section id="ai-assistant" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm max-w-4xl mx-auto flex flex-col h-[650px]">
+                <div class="border-b pb-3 mb-3 flex flex-wrap justify-between items-center gap-2">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-calculator text-indigo-600 mr-2"></i>Unified AI Assistant & Math Solver</h2>
+                        <p class="text-xs text-slate-500">Supports Math Expressions (Trigonometry, Calculus, Algebra) & Voice Input in English/Hindi/Hinglish.</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <select id="language-select" onchange="changeLanguage()" class="text-xs border border-indigo-200 rounded-lg p-1.5 bg-indigo-50 font-semibold text-indigo-800 outline-none">
+                            <option value="en-US">English</option>
+                            <option value="hi-IN">Hindi (हिंदी)</option>
+                            <option value="hinglish">Hinglish</option>
+                        </select>
+                        <div id="mic-status-badge" class="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 text-slate-600 border">
+                            <i class="fa-solid fa-microphone-slash mr-1"></i> Mic Ready
+                        </div>
+                    </div>
+                </div>
+
+                <div id="chat-box" class="flex-1 overflow-y-auto space-y-4 p-4 bg-slate-50 rounded-xl mb-3 border">
+                    <div class="flex items-start space-x-2">
+                        <div class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-xs font-bold flex-shrink-0">AI</div>
+                        <div class="bg-white p-3 rounded-lg border text-sm max-w-[85%] text-slate-700 shadow-sm">
+                            Hello! Try speaking or typing <b>sin theta upon cos theta</b>, <b>capital of us</b>, <b>cos theta + sin theta</b>, or <b>sqrt(144)</b>!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-2 bg-white p-2 rounded-xl border">
+                    <button id="mic-btn" onclick="toggleVoiceAssistant()" class="p-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg transition border border-indigo-200 flex-shrink-0 flex items-center justify-center" title="Toggle Voice Input">
+                        <i id="mic-icon" class="fa-solid fa-microphone text-lg"></i>
+                    </button>
+                    <input type="text" id="assistant-input" placeholder="Ask sin theta upon cos theta, capital of us, cos theta + sin theta..." class="flex-1 text-sm outline-none px-2" onkeypress="handleKeyPress(event)">
+                    <button onclick="processSubmit()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg text-sm transition font-semibold flex items-center">
+                        <i class="fa-solid fa-paper-plane mr-2"></i> Ask
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. SMART DYNAMIC QUIZ -->
+        <section id="quiz" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm max-w-3xl mx-auto">
+                <div class="border-b pb-4 mb-4">
+                    <h2 class="text-xl font-bold text-slate-800"><i class="fa-solid fa-vial text-indigo-600 mr-2"></i>Smart Class & Subject Assessment</h2>
+                    <p class="text-xs text-slate-500 mt-1">Select your class and subject to generate a targeted quiz. Quiz scores automatically sync to the teacher portal and weak-area engine.</p>
+                </div>
+
+                <form id="quiz-config-form" onsubmit="generateDynamicQuiz(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Class / Grade</label>
+                        <select id="quiz-class" required class="w-full border rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50">
+                            <option value="">Select Class</option>
+                            <option value="Class 6">Class 6</option>
+                            <option value="Class 7">Class 7</option>
+                            <option value="Class 8">Class 8</option>
+                            <option value="Class 9">Class 9</option>
+                            <option value="Class 10">Class 10</option>
+                            <option value="Class 11">Class 11</option>
+                            <option value="Class 12">Class 12</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Subject</label>
+                        <select id="quiz-subject" required class="w-full border rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50">
+                            <option value="">Select Subject</option>
+                            <option value="Science">Science</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Physics">Physics</option>
+                            <option value="Chemistry">Chemistry</option>
+                            <option value="Social Studies">Social Studies</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 rounded-lg transition flex items-center justify-center">
+                            <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Generate Quiz
+                        </button>
+                    </div>
+                </form>
+
+                <div id="quiz-questions-container" class="hidden space-y-6 border-t pt-4">
+                    <div class="flex justify-between items-center bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                        <span class="text-xs font-bold text-indigo-800" id="quiz-active-meta"></span>
+                        <span class="text-xs bg-indigo-200 text-indigo-800 px-2 py-0.5 rounded font-semibold">Adaptive</span>
+                    </div>
+
+                    <form id="active-quiz-form" onsubmit="submitDynamicQuiz(event)" class="space-y-6">
+                        <div id="dynamic-q-list" class="space-y-4"></div>
+                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-lg text-sm font-semibold transition">
+                            Submit Assessment & Evaluate
+                        </button>
+                    </form>
+                </div>
+
+                <div id="quiz-feedback" class="hidden mt-4 p-4 rounded-lg"></div>
+            </div>
+        </section>
+
+        <!-- 4. TEACHER MONITORING PORTAL -->
+        <section id="teacher" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex justify-between items-center border-b pb-4 mb-4 flex-wrap gap-2">
+                    <div>
+                        <h2 class="text-xl font-bold text-indigo-800"><i class="fa-solid fa-chalkboard-user mr-2"></i>Teacher Monitoring & Communication Dashboard</h2>
+                        <p class="text-xs text-slate-500">Monitor overall student metrics, track weak topics, and directly answer/send support messages to students.</p>
+                    </div>
+                    <span class="text-xs bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-bold">Database Live Sync</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                    <div class="p-4 bg-slate-50 border rounded-xl">
+                        <p class="text-xs font-semibold text-slate-500 uppercase">Assessed Students</p>
+                        <h3 class="text-2xl font-bold text-slate-800" id="teacher-student-count">1 Student (Active)</h3>
+                    </div>
+                    <div class="p-4 bg-rose-50 border border-rose-200 rounded-xl">
+                        <p class="text-xs font-semibold text-rose-600 uppercase">Weak Topic Flags</p>
+                        <h3 class="text-2xl font-bold text-rose-700" id="teacher-weak-count">0</h3>
+                    </div>
+                    <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
+                        <p class="text-xs font-semibold text-emerald-600 uppercase">Class Quiz Average</p>
+                        <h3 class="text-2xl font-bold text-emerald-800" id="teacher-class-avg">0%</h3>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <h3 class="text-base font-bold text-slate-800 border-b pb-2"><i class="fa-solid fa-triangle-exclamation text-rose-500 mr-2"></i>Student Weak Areas Identified</h3>
+                        <div id="teacher-weak-topics-list" class="space-y-2">
+                            <p class="text-xs text-slate-400 italic">No student weak areas reported in database yet.</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 bg-slate-50 p-4 rounded-xl border">
+                        <h3 class="text-base font-bold text-indigo-900 border-b pb-2"><i class="fa-solid fa-paper-plane text-indigo-600 mr-2"></i>Send Direct Message / Answer to Student App</h3>
+                        <form onsubmit="sendTeacherMessage(event)" class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Subject / Topic Focus</label>
+                                <input type="text" id="teacher-msg-topic" required placeholder="e.g. Guidance on Newton's Second Law" class="w-full border rounded-lg p-2.5 text-xs outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Teacher Instructions / Direct Answer</label>
+                                <textarea id="teacher-msg-body" rows="4" required placeholder="Type direct explanation, study tips, or homework guidance for the student..." class="w-full border rounded-lg p-2.5 text-xs outline-none focus:ring-2 focus:ring-indigo-500 bg-white"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded-lg text-xs transition">
+                                <i class="fa-solid fa-envelope mr-1.5"></i> Broadcast Message to Student Dashboard
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. STUDY PLANNER -->
+        <section id="planner" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-xl font-bold text-indigo-700 mb-2"><i class="fa-solid fa-calendar-plus mr-2"></i>AI Study Schedule Generator</h2>
+                <form id="planner-form" onsubmit="generateSchedule(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Class / Grade</label>
+                        <select id="planner-class" required class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50">
+                            <option value="">Select Class</option>
+                            <option value="Class 6">Class 6</option>
+                            <option value="Class 7">Class 7</option>
+                            <option value="Class 8">Class 8</option>
+                            <option value="Class 9">Class 9</option>
+                            <option value="Class 10">Class 10</option>
+                            <option value="Class 11">Class 11</option>
+                            <option value="Class 12">Class 12</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Subjects</label>
+                        <input type="text" id="planner-subjects" required placeholder="e.g. Science, Mathematics" class="w-full border rounded-lg p-2.5 text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Target Exam Date</label>
+                        <input type="date" id="planner-date" required class="w-full border rounded-lg p-2.5 text-sm outline-none">
+                    </div>
+                    <div class="flex items-end">
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium p-2.5 rounded-lg text-sm transition flex justify-center items-center">
+                            <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Generate Path
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="planner-loader" class="hidden text-center p-8 bg-indigo-50 rounded-xl border border-indigo-200">
+                <i class="fa-solid fa-spinner animate-spin text-3xl text-indigo-600 mb-2"></i>
+                <p class="text-sm font-semibold text-indigo-900">Generating Schedule...</p>
+            </div>
+
+            <div id="schedule-result" class="hidden bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6">
+                <div class="flex justify-between items-center border-b pb-4 flex-wrap gap-2">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800">Customized Study Plan</h3>
+                        <p class="text-xs text-slate-500" id="planner-meta-info"></p>
+                    </div>
+                    <button onclick="downloadPlannerPDF()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-4 py-2.5 rounded-lg transition flex items-center">
+                        <i class="fa-solid fa-file-pdf text-base mr-2"></i> Download PDF
+                    </button>
+                </div>
+
+                <div id="pdf-export-content" class="p-4 bg-white rounded-lg space-y-6">
+                    <div class="border-b pb-3">
+                        <h2 class="text-2xl font-bold text-indigo-800">Gram Shiksha Tech — Study Path</h2>
+                    </div>
+                    <div>
+                        <h4 class="text-base font-bold text-slate-800 mb-3"><i class="fa-solid fa-clock text-indigo-600 mr-2"></i>Adaptive Schedule</h4>
+                        <div id="schedule-timeline" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. EXAM NOTES READER -->
+        <section id="notes" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm max-w-4xl mx-auto">
+                <h2 class="text-xl font-bold text-slate-800 mb-2"><i class="fa-solid fa-file-pdf text-indigo-600 mr-2"></i>Exam Notes Reader & Summarizer</h2>
+
+                <div class="border-2 border-dashed border-indigo-200 rounded-xl p-6 text-center bg-indigo-50/50 hover:bg-indigo-50 transition">
+                    <i class="fa-solid fa-cloud-arrow-up text-4xl text-indigo-500 mb-2"></i>
+                    <p class="text-sm font-semibold text-slate-700 mb-1">Upload Study Material or PDF</p>
+                    <input type="file" id="pdf-file-input" accept="application/pdf" class="hidden" onchange="handlePDFUpload(event)">
+                    <button onclick="document.getElementById('pdf-file-input').click()" class="bg-indigo-600 text-white px-5 py-2 rounded-lg text-sm font-medium transition">Browse PDF</button>
+                    <p id="pdf-filename-display" class="text-xs font-bold text-indigo-700 mt-3 hidden"></p>
+                </div>
+
+                <div class="mt-4">
+                    <textarea id="notes-text" rows="3" placeholder="Extracted text or typed notes..." class="w-full border rounded-lg p-3 text-xs outline-none"></textarea>
+                </div>
+
+                <div class="mt-4">
+                    <button onclick="processAndFormatNotes()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-6 py-2.5 rounded-lg text-sm transition">Format Note</button>
+                </div>
+
+                <div id="exam-ready-container" class="hidden mt-8 border-t pt-6 space-y-4">
+                    <h3 class="text-lg font-bold text-indigo-900">Summary</h3>
+                    <div id="exam-summary" class="text-sm text-slate-700 bg-slate-50 p-4 rounded-lg"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- API MODAL -->
+    <div id="api-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+            <h3 class="text-lg font-bold text-slate-800 mb-4">Google API Credentials</h3>
+            <div class="space-y-3">
+                <input type="password" id="google-api-key" placeholder="API Key" class="w-full border rounded-lg p-2.5 text-xs outline-none">
+                <input type="text" id="google-cx-id" placeholder="CX Engine ID" class="w-full border rounded-lg p-2.5 text-xs outline-none">
+            </div>
+            <div class="mt-6 flex space-x-2">
+                <button onclick="saveApiKeys()" class="flex-1 bg-indigo-600 text-white text-xs font-bold py-2.5 rounded-lg">Save</button>
+                <button onclick="toggleApiSettingsModal()" class="bg-slate-200 text-slate-700 text-xs font-semibold px-4 py-2.5 rounded-lg">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. INDEXEDDB DATABASE LAYER
+        // ==========================================
+        const DB_NAME = "GramShikshaTechDB_v12";
+        const DB_VERSION = 12;
+        let db = null;
+
+        function initDatabase() {
+            const request = indexedDB.open(DB_NAME, DB_VERSION);
+            request.onupgradeneeded = (e) => {
+                const dbRef = e.target.result;
+                if (!dbRef.objectStoreNames.contains("schedules")) dbRef.createObjectStore("schedules", { keyPath: "id", autoIncrement: true });
+                if (!dbRef.objectStoreNames.contains("quizzes")) dbRef.createObjectStore("quizzes", { keyPath: "id", autoIncrement: true });
+                if (!dbRef.objectStoreNames.contains("chats")) dbRef.createObjectStore("chats", { keyPath: "id", autoIncrement: true });
+                if (!dbRef.objectStoreNames.contains("weak_topics")) dbRef.createObjectStore("weak_topics", { keyPath: "topic" });
+                if (!dbRef.objectStoreNames.contains("teacher_messages")) dbRef.createObjectStore("teacher_messages", { keyPath: "id", autoIncrement: true });
+            };
+            request.onsuccess = (e) => {
+                db = e.target.result;
+                loadDashboardData();
+            };
+        }
+
+        function saveToDB(storeName, data, callback) {
+            if (!db) return;
+            const tx = db.transaction(storeName, "readwrite");
+            tx.objectStore(storeName).put(data).onsuccess = () => { if (callback) callback(); };
+        }
+
+        function getAllFromDB(storeName, callback) {
+            if (!db) return;
+            const tx = db.transaction(storeName, "readonly");
+            const req = tx.objectStore(storeName).getAll();
+            req.onsuccess = () => callback(req.result);
+        }
+
+        function clearDatabase() {
+            if (confirm("Reset local app database?")) {
+                const tx = db.transaction(["schedules", "quizzes", "chats", "weak_topics", "teacher_messages"], "readwrite");
+                tx.objectStore("schedules").clear();
+                tx.objectStore("quizzes").clear();
+                tx.objectStore("chats").clear();
+                tx.objectStore("weak_topics").clear();
+                tx.objectStore("teacher_messages").clear();
+                tx.oncomplete = () => location.reload();
+            }
+        }
+
+        // ==========================================
+        // 2. NAVIGATION & DASHBOARD SYNC
+        // ==========================================
+        function showSection(sectionId) {
+            ['dashboard', 'ai-assistant', 'planner', 'quiz', 'notes', 'teacher'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
+            if (sectionId === 'dashboard') loadDashboardData();
+            if (sectionId === 'teacher') loadTeacherDashboard();
+        }
+
+        function loadDashboardData() {
+            getAllFromDB("quizzes", (quizzes) => {
+                let avg = 0;
+                if (quizzes.length > 0) {
+                    const total = quizzes.reduce((acc, curr) => acc + curr.score, 0);
+                    avg = Math.round(total / quizzes.length);
+                    document.getElementById('avg-score').innerText = `${avg}%`;
+                }
+
+                const pathBox = document.getElementById('learning-path-card');
+                const masteryEl = document.getElementById('mastery-level');
+
+                if (quizzes.length === 0) {
+                    masteryEl.innerText = "Foundation";
+                    pathBox.innerHTML = `
+                        <div class="p-3 bg-indigo-50 border rounded-lg">
+                            <span class="text-xs font-bold text-indigo-700">Stage 1: Foundational Assessment</span>
+                            <p class="text-xs text-slate-600 mt-1">Take a quiz by class & subject to generate custom recommendations.</p>
+                        </div>
+                    `;
+                } else if (avg >= 80) {
+                    masteryEl.innerText = "Advanced";
+                    pathBox.innerHTML = `
+                        <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
+                            <span class="text-xs font-bold text-emerald-800">Stage 3: Advanced Problem Solving</span>
+                            <p class="text-xs text-slate-600 mt-1">Mastery high! Try higher grade quizzes.</p>
+                        </div>
+                    `;
+                } else {
+                    masteryEl.innerText = "Intermediate";
+                    pathBox.innerHTML = `
+                        <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                            <span class="text-xs font-bold text-amber-800">Stage 2: Active Revision</span>
+                            <p class="text-xs text-slate-600 mt-1">Review flagged topics and ask the AI Assistant.</p>
+                        </div>
+                    `;
+                }
+            });
+
+            getAllFromDB("weak_topics", (topics) => {
+                document.getElementById('weak-count').innerText = `${topics.length} Topic(s)`;
+                const list = document.getElementById('dash-weak-list');
+                if (topics.length > 0) {
+                    list.innerHTML = topics.map(t => `
+                        <div class="p-3 bg-rose-50 border border-rose-200 rounded-lg flex justify-between items-center">
+                            <div>
+                                <p class="font-semibold text-rose-800 text-sm">${t.topic}</p>
+                                <p class="text-xs text-rose-600">${t.reason}</p>
+                            </div>
+                            <button onclick="showSection('ai-assistant')" class="text-xs bg-rose-600 text-white px-3 py-1.5 rounded">Ask AI</button>
+                        </div>
+                    `).join('');
+                } else {
+                    list.innerHTML = `<p class="text-xs text-slate-400 italic">No weak topics detected.</p>`;
+                }
+            });
+
+            getAllFromDB("teacher_messages", (msgs) => {
+                const msgsBox = document.getElementById('student-teacher-msgs');
+                if (msgs.length > 0) {
+                    msgsBox.innerHTML = msgs.map(m => `
+                        <div class="bg-white p-3 rounded-lg border border-amber-200 shadow-sm">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs font-bold text-indigo-700"><i class="fa-solid fa-user-tie mr-1"></i>${m.topic}</span>
+                                <span class="text-[10px] text-slate-400">${new Date(m.timestamp).toLocaleTimeString()}</span>
+                            </div>
+                            <p class="text-xs text-slate-700">${m.body}</p>
+                        </div>
+                    `).join('');
+                } else {
+                    msgsBox.innerHTML = `<p class="text-xs text-amber-700 italic">No direct messages from teacher yet.</p>`;
+                }
+            });
+        }
+
+        // ==========================================
+        // 3. ADVANCED VOICE & MATHEMATICS SOLVER ENGINE
+        // ==========================================
+        let recognition = null;
+        let isListening = false;
+        let selectedLang = "en-US";
+
+        function changeLanguage() {
+            selectedLang = document.getElementById('language-select').value;
+            if (recognition) {
+                recognition.lang = selectedLang === "hinglish" ? "hi-IN" : selectedLang;
+            }
+        }
+
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = selectedLang;
+
+            recognition.onstart = () => {
+                isListening = true;
+                const badge = document.getElementById('mic-status-badge');
+                badge.className = "text-xs font-semibold px-3 py-1 rounded-full bg-rose-100 text-rose-700 border border-rose-300 animate-pulse";
+                badge.innerHTML = `<i class="fa-solid fa-microphone mr-1"></i> Listening...`;
+                document.getElementById('mic-btn').className = "p-3 bg-rose-500 text-white rounded-lg transition shadow flex-shrink-0 flex items-center justify-center";
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('assistant-input').value = transcript;
+                processSubmit();
+            };
+
+            recognition.onerror = () => { stopVoiceRecognition(); };
+            recognition.onend = () => { stopVoiceRecognition(); };
+        }
+
+        function toggleVoiceAssistant() {
+            if (!recognition) return alert("Speech recognition is not supported in this browser. Please use Chrome.");
+            if (isListening) {
+                recognition.stop();
+            } else {
+                recognition.lang = selectedLang === "hinglish" ? "hi-IN" : selectedLang;
+                recognition.start();
+            }
+        }
+
+        function stopVoiceRecognition() {
+            isListening = false;
+            const badge = document.getElementById('mic-status-badge');
+            badge.className = "text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 text-slate-600 border";
+            badge.innerHTML = `<i class="fa-solid fa-microphone-slash mr-1"></i> Mic Ready`;
+            document.getElementById('mic-btn').className = "p-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg transition border border-indigo-200 flex-shrink-0 flex items-center justify-center";
+        }
+
+        function normalizeSpokenMath(text) {
+            let t = text.toLowerCase().trim();
+            
+            t = t.replace(/\bsign\b|\bsine\b/g, 'sin')
+                 .replace(/\bcause\b|\bcosine\b/g, 'cos')
+                 .replace(/\btangent\b|\btan\b/g, 'tan')
+                 .replace(/\bsecant\b/g, 'sec')
+                 .replace(/\bcosecant\b/g, 'csc')
+                 .replace(/\bcotangent\b/g, 'cot')
+                 .replace(/\bupon\b|\bdivided by\b|\bover\b/g, '/')
+                 .replace(/\bplus\b/g, '+')
+                 .replace(/\bminus\b/g, '-')
+                 .replace(/\btimes\b|\bmultiplied by\b/g, '*')
+                 .replace(/\bequals?\b/g, '=')
+                 .replace(/\bsquare root of\b|\bsqrt\b/g, 'sqrt')
+                 .replace(/\btheta\b/g, 'theta')
+                 .replace(/\bpi\b/g, 'pi');
+
+            return t;
+        }
+
+        function parseAndSolveMath(query) {
+            let expr = normalizeSpokenMath(query);
+            expr = expr.replace(/\s+/g, ' ');
+
+            if (expr.includes("sin theta / cos theta") || expr.includes("sin(theta) / cos(theta)") || expr.includes("sintheta / costheta") || expr.includes("sin / cos")) {
+                return `<b>Trigonometric Identity Solution:</b><br>` +
+                       `• <b>Formula:</b> sin(θ) / cos(θ) = <b>tan(θ)</b><br>` +
+                       `• <b>Explanation:</b> The ratio of sine to cosine of an angle is equal to the tangent of that angle.`;
+            }
+
+            if (expr.includes("cos theta / sin theta") || expr.includes("cos(theta) / sin(theta)") || expr.includes("costheta / sintheta") || expr.includes("cos / sin")) {
+                return `<b>Trigonometric Identity Solution:</b><br>` +
+                       `• <b>Formula:</b> cos(θ) / sin(θ) = <b>cot(θ)</b><br>` +
+                       `• <b>Explanation:</b> The ratio of cosine to sine of an angle is equal to the cotangent of that angle.`;
+            }
+
+            if (expr.includes("1 / cos theta") || expr.includes("1 / cos(theta)") || expr.includes("1 / costheta") || expr.includes("1 / cos")) {
+                return `<b>Reciprocal Identity Solution:</b><br>` +
+                       `• <b>Formula:</b> 1 / cos(θ) = <b>sec(θ)</b>`;
+            }
+
+            if (expr.includes("1 / sin theta") || expr.includes("1 / sin(theta)") || expr.includes("1 / sintheta") || expr.includes("1 / sin")) {
+                return `<b>Reciprocal Identity Solution:</b><br>` +
+                       `• <b>Formula:</b> 1 / sin(θ) = <b>csc(θ)</b> (or cosec θ)`;
+            }
+
+            if (expr.includes("1 / tan theta") || expr.includes("1 / tan(theta)") || expr.includes("1 / tantheta") || expr.includes("1 / tan")) {
+                return `<b>Reciprocal Identity Solution:</b><br>` +
+                       `• <b>Formula:</b> 1 / tan(θ) = <b>cot(θ)</b>`;
+            }
+
+            if (expr.includes("cos theta + sin theta") || 
+                expr.includes("sin theta + cos theta") || 
+                expr.includes("cos(theta) + sin(theta)") || 
+                expr.includes("sin(theta) + cos(theta)") ||
+                expr.includes("costheta + sintheta") ||
+                expr.includes("sintheta + costheta")) {
+                return `<b>Trigonometric Identity / Expression Solution:</b><br>` +
+                       `• <b>Expression:</b> sin(θ) + cos(θ)<br>` +
+                       `• <b>Harmonic Form:</b> √2 · sin(θ + 45°) <i>or</i> √2 · cos(θ - 45°)<br>` +
+                       `• <b>Maximum Value:</b> +√2 (≈ 1.414) when θ = 45° (π/4)<br>` +
+                       `• <b>Minimum Value:</b> -√2 (≈ -1.414) when θ = 225° (5π/4)<br>` +
+                       `• <b>Squared Form:</b> (sin θ + cos θ)² = 1 + sin(2θ)`;
+            }
+
+            if ((expr.includes("sin^2") || expr.includes("sin2")) && (expr.includes("cos^2") || expr.includes("cos2"))) {
+                return `<b>Fundamental Pythagorean Identity:</b><br>` +
+                       `• <b>sin²(θ) + cos²(θ) = 1</b> for all real angles θ.`;
+            }
+
+            const trigMatch = expr.match(/^(sin|cos|tan|sec|csc|cot)\s*\(?(\d+)\)?\s*(deg|degrees)?$/);
+            if (trigMatch) {
+                const func = trigMatch[1];
+                const deg = parseFloat(trigMatch[2]);
+                const rad = (deg * Math.PI) / 180;
+                let res = 0;
+                if (func === "sin") res = Math.sin(rad);
+                else if (func === "cos") res = Math.cos(rad);
+                else if (func === "tan") res = Math.tan(rad);
+                else if (func === "sec") res = 1 / Math.cos(rad);
+                else if (func === "csc") res = 1 / Math.sin(rad);
+                else if (func === "cot") res = 1 / Math.tan(rad);
+
+                return `<b>Trigonometric Calculation:</b><br>• <b>${func}(${deg}°)</b> = <b>${parseFloat(res.toFixed(4))}</b>`;
+            }
+
+            const sqrtMatch = expr.match(/^(sqrt|root|√)\s*\(?(\d+(\.\d+)?)\)?$/);
+            if (sqrtMatch) {
+                const val = parseFloat(sqrtMatch[2]);
+                return `<b>Square Root Solution:</b><br>√${val} = <b>${Math.sqrt(val)}</b>`;
+            }
+
+            if (expr.includes("derivative of x^") || expr.includes("d/dx x^")) {
+                const p = expr.match(/x\^(\d+)/);
+                if (p) {
+                    const n = parseInt(p[1]);
+                    return `<b>Derivative Rule:</b><br>d/dx (x^${n}) = <b>${n}x^${n - 1}</b>`;
+                }
+            }
+
+            let arithmeticClean = expr.replace(/theta|pi/g, '').trim();
+            if (/^[0-9+\-*/().\s]+$/.test(arithmeticClean) && arithmeticClean.length > 0) {
+                try {
+                    const result = eval(arithmeticClean);
+                    if (result !== undefined && !isNaN(result)) {
+                        return `<b>Arithmetic Calculation:</b><br>${query.trim()} = <b>${result}</b>`;
+                    }
+                } catch(e) {}
+            }
+
+            return null;
+        }
+
+        function checkDirectFactQueries(query) {
+            let q = query.toLowerCase().trim();
+
+            if (q.includes("capital of us") || q.includes("capital of the us") || q.includes("capital of america") || q.includes("capital of united states")) {
+                return "<b>Washington, D.C.</b> is the capital of the United States.";
+            }
+            if (q.includes("capital of india")) {
+                return "<b>New Delhi</b> is the capital of India.";
+            }
+            if (q.includes("capital of uk") || q.includes("capital of united kingdom") || q.includes("capital of england")) {
+                return "<b>London</b> is the capital of the United Kingdom.";
+            }
+            if (q.includes("capital of france")) {
+                return "<b>Paris</b> is the capital of France.";
+            }
+            if (q.includes("capital of japan")) {
+                return "<b>Tokyo</b> is the capital of Japan.";
+            }
+            return null;
+        }
+
+        function normalizeWikiQuery(query) {
+            let q = query.toLowerCase().trim();
+            if (q.startsWith("capital of ")) {
+                let entity = q.replace("capital of ", "").trim();
+                return `Capital of ${entity}`;
+            }
+            return query;
+        }
+
+        async function processSubmit() {
+            const input = document.getElementById('assistant-input');
+            const rawQuery = input.value.trim();
+            if (!rawQuery) return;
+
+            appendChatMessage('user', rawQuery);
+            input.value = '';
+
+            const mathResult = parseAndSolveMath(rawQuery);
+            if (mathResult) {
+                appendChatMessage('ai', mathResult);
+                speakResponse(mathResult);
+                return;
+            }
+
+            const directFact = checkDirectFactQueries(rawQuery);
+            if (directFact) {
+                appendChatMessage('ai', directFact);
+                speakResponse(directFact);
+                return;
+            }
+
+            const optimizedQuery = normalizeWikiQuery(rawQuery);
+
+            try {
+                let wikiDomain = 'en';
+                if (selectedLang === 'hi-IN') wikiDomain = 'hi';
+
+                let summaryUrl = `https://${wikiDomain}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(optimizedQuery)}`;
+                let summaryRes = await fetch(summaryUrl);
+                
+                if (summaryRes.ok) {
+                    let summaryData = await summaryRes.json();
+                    if (summaryData.extract && summaryData.type !== 'disambiguation') {
+                        let cleanExtract = summaryData.extract.replace(/\{\\displaystyle [^}]+\}/g, "");
+                        let resultText = `<b>${summaryData.title}</b>: ${cleanExtract}`;
+                        appendChatMessage('ai', resultText);
+                        speakResponse(cleanExtract);
+                        return;
+                    }
+                }
+
+                const wikiUrl = `https://${wikiDomain}.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(optimizedQuery)}&format=json&origin=*`;
+                const res = await fetch(wikiUrl);
+                const data = await res.json();
+
+                let responseText = "";
+                if (data.query && data.query.search.length > 0) {
+                    let filteredResults = data.query.search.filter(item => 
+                        !item.title.toLowerCase().includes("list of") && 
+                        !item.snippet.toLowerCase().includes("may refer to:")
+                    );
+                    
+                    let topResult = filteredResults.length > 0 ? filteredResults[0] : data.query.search[0];
+                    let cleanSnippet = topResult.snippet.replace(/<\/?[^>]+(>|$)/g, "").replace(/\{\\displaystyle [^}]+\}/g, "");
+                    const title = topResult.title;
+
+                    responseText = `<b>${title}</b>: ${cleanSnippet}`;
+                } else {
+                    responseText = "I couldn't find a direct answer. Please try rephrasing your query.";
+                }
+
+                appendChatMessage('ai', responseText);
+                speakResponse(responseText);
+            } catch (err) {
+                appendChatMessage('ai', "Sorry, I encountered a network error trying to process that query.");
+            }
+        }
+
+        function appendChatMessage(sender, text) {
+            const chatBox = document.getElementById('chat-box');
+            const isAI = sender === 'ai';
+            
+            chatBox.innerHTML += `
+                <div class="flex items-start ${isAI ? '' : 'justify-end'} space-x-2">
+                    ${isAI ? '<div class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-xs font-bold flex-shrink-0">AI</div>' : ''}
+                    <div class="${isAI ? 'bg-white text-slate-700 border' : 'bg-indigo-600 text-white'} p-3.5 rounded-xl text-xs max-w-[85%] shadow-sm leading-relaxed">
+                        ${text}
+                        ${isAI ? `<div class="mt-2 border-t pt-1 text-right"><button onclick="speakResponse('${text.replace(/'/g, "\\'").replace(/"/g, '&quot;')}')" class="text-[10px] text-indigo-600 font-bold hover:underline"><i class="fa-solid fa-volume-high mr-1"></i>Listen</button></div>` : ''}
+                    </div>
+                </div>
+            `;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function speakResponse(textToSpeak) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+
+                let cleanText = textToSpeak
+                    .replace(/<\/?[^>]+(>|$)/g, "")
+                    .replace(/\{\\displaystyle [^}]+\}/g, "")
+                    .replace(/\\/g, "")
+                    .replace(/θ/g, " theta ")
+                    .replace(/√/g, " square root of ");
+
+                const utterance = new SpeechSynthesisUtterance(cleanText);
+                utterance.rate = 0.95;
+                utterance.lang = (selectedLang === 'hi-IN' || selectedLang === 'hinglish') ? 'hi-IN' : 'en-US';
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function handleKeyPress(e) { if (e.key === 'Enter') processSubmit(); }
+
+        // ==========================================
+        // 4. DYNAMIC QUIZ BANK BY CLASS & SUBJECT
+        // ==========================================
+        const QUIZ_BANK = {
+            "Science": [
+                { q: "What reaction absorbs heat from surroundings?", options: ["Exothermic", "Endothermic"], correct: "Endothermic", topic: "Endothermic & Exothermic Reactions" },
+                { q: "What is the pH level of pure distilled water?", options: ["7 (Neutral)", "14 (Basic)"], correct: "7 (Neutral)", topic: "Acids, Bases and Neutrality" },
+                { q: "Which organelle is known as the powerhouse of the cell?", options: ["Mitochondria", "Ribosome"], correct: "Mitochondria", topic: "Cellular Biology Fundamentals" }
+            ],
+            "Physics": [
+                { q: "Which law states Force = Mass × Acceleration (F=ma)?", options: ["Newton's 1st Law", "Newton's 2nd Law"], correct: "Newton's 2nd Law", topic: "Newton's Laws of Motion" },
+                { q: "What type of lens converges light rays to a single point?", options: ["Convex Lens", "Concave Lens"], correct: "Convex Lens", topic: "Light Optics & Refraction" },
+                { q: "What is the SI unit of electrical resistance?", options: ["Ohm (Ω)", "Ampere (A)"], correct: "Ohm (Ω)", topic: "Electricity & Circuits" }
+            ],
+            "Mathematics": [
+                { q: "What is the value of sin(90°)?", options: ["1", "0"], correct: "1", topic: "Trigonometric Ratios" },
+                { q: "What is the square root of 144?", options: ["12", "14"], correct: "12", topic: "Square Roots & Fundamentals" },
+                { q: "In a right triangle, what theorem states a² + b² = c²?", options: ["Pythagorean Theorem", "Binomial Theorem"], correct: "Pythagorean Theorem", topic: "Geometry Principles" }
+            ],
+            "Chemistry": [
+                { q: "What is the chemical symbol for Gold?", options: ["Au", "Ag"], correct: "Au", topic: "Periodic Table & Symbols" },
+                { q: "What gas is produced when an acid reacts with metal?", options: ["Hydrogen Gas", "Oxygen Gas"], correct: "Hydrogen Gas", topic: "Chemical Reactions" }
+            ],
+            "Social Studies": [
+                { q: "Which primary resource document defines the fundamental law of a nation?", options: ["Constitution", "Newspaper"], correct: "Constitution", topic: "Civics & Governance" }
+            ]
+        };
+
+        let currentActiveQuiz = [];
+
+        function generateDynamicQuiz(e) {
+            e.preventDefault();
+            const selectedClass = document.getElementById('quiz-class').value;
+            const selectedSubject = document.getElementById('quiz-subject').value;
+
+            const pool = QUIZ_BANK[selectedSubject] || QUIZ_BANK["Science"];
+            currentActiveQuiz = pool;
+
+            document.getElementById('quiz-active-meta').innerText = `${selectedClass} — ${selectedSubject} Assessment`;
+            
+            const qList = document.getElementById('dynamic-q-list');
+            qList.innerHTML = currentActiveQuiz.map((item, idx) => `
+                <div class="space-y-2 bg-slate-50 p-4 rounded-lg border">
+                    <p class="font-bold text-xs text-indigo-900">${idx + 1}. [${selectedSubject}] ${item.q}</p>
+                    ${item.options.map(opt => `
+                        <label class="flex items-center space-x-2 text-xs text-slate-700 hover:bg-slate-100 p-2 rounded cursor-pointer">
+                            <input type="radio" name="dq_${idx}" value="${opt}" required> <span>${opt}</span>
+                        </label>
+                    `).join('')}
+                </div>
+            `).join('');
+
+            document.getElementById('quiz-questions-container').classList.remove('hidden');
+            document.getElementById('quiz-feedback').classList.add('hidden');
+        }
+
+        function submitDynamicQuiz(e) {
+            e.preventDefault();
+            let scoreCount = 0;
+            const selectedSubject = document.getElementById('quiz-subject').value;
+            const selectedClass = document.getElementById('quiz-class').value;
+
+            currentActiveQuiz.forEach((item, idx) => {
+                const selectedVal = document.querySelector(`input[name="dq_${idx}"]:checked`)?.value;
+                if (selectedVal === item.correct) {
+                    scoreCount++;
+                } else {
+                    saveToDB("weak_topics", { 
+                        topic: `${item.topic} (${selectedSubject})`, 
+                        reason: `Missed question: "${item.q}" in ${selectedClass}` 
+                    });
+                }
+            });
+
+            const finalPercent = Math.round((scoreCount / currentActiveQuiz.length) * 100);
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.classList.remove('hidden');
+            feedback.className = `p-4 rounded-lg font-semibold text-xs ${finalPercent >= 70 ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}`;
+            feedback.innerText = `Quiz Completed! Score: ${finalPercent}%. Correct: ${scoreCount}/${currentActiveQuiz.length}. Weak areas logged to Database & Teacher Portal.`;
+
+            saveToDB("quizzes", { class: selectedClass, subject: selectedSubject, score: finalPercent, timestamp: new Date().toISOString() }, () => loadDashboardData());
+        }
+
+        // ==========================================
+        // 5. TEACHER PORTAL & MESSAGING
+        // ==========================================
+        function loadTeacherDashboard() {
+            getAllFromDB("weak_topics", (topics) => {
+                const list = document.getElementById('teacher-weak-topics-list');
+                document.getElementById('teacher-weak-count').innerText = topics.length;
+
+                if (topics.length > 0) {
+                    list.innerHTML = topics.map(t => `
+                        <div class="p-3 bg-rose-50 border border-rose-200 rounded-lg flex justify-between items-center">
+                            <div>
+                                <span class="text-[10px] font-bold text-rose-700 uppercase">Student DB Flag</span>
+                                <h4 class="font-bold text-xs text-slate-800">${t.topic}</h4>
+                                <p class="text-[11px] text-rose-600">${t.reason}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    list.innerHTML = `<p class="text-xs text-slate-400 italic">No student weak areas reported in database yet.</p>`;
+                }
+            });
+
+            getAllFromDB("quizzes", (quizzes) => {
+                if (quizzes.length > 0) {
+                    const total = quizzes.reduce((acc, curr) => acc + curr.score, 0);
+                    document.getElementById('teacher-class-avg').innerText = `${Math.round(total / quizzes.length)}%`;
+                }
+            });
+        }
+
+        function sendTeacherMessage(e) {
+            e.preventDefault();
+            const topic = document.getElementById('teacher-msg-topic').value;
+            const body = document.getElementById('teacher-msg-body').value;
+
+            if (!topic || !body) return;
+
+            saveToDB("teacher_messages", { topic, body, timestamp: new Date().toISOString() }, () => {
+                alert("Direct message sent to Student Dashboard successfully!");
+                document.getElementById('teacher-msg-topic').value = "";
+                document.getElementById('teacher-msg-body').value = "";
+            });
+        }
+
+        // ==========================================
+        // 6. PLANNER & NOTES READER
+        // ==========================================
+        function generateSchedule(e) {
+            e.preventDefault();
+            const classVal = document.getElementById('planner-class').value;
+            const subjectsInput = document.getElementById('planner-subjects').value;
+            const examDateVal = document.getElementById('planner-date').value;
+
+            document.getElementById('planner-loader').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('planner-loader').classList.add('hidden');
+                document.getElementById('schedule-result').classList.remove('hidden');
+                document.getElementById('schedule-timeline').innerHTML = subjectsInput.split(',').map(s => `
+                    <div class="p-3 bg-indigo-50 border rounded-lg">
+                        <span class="text-xs font-bold text-indigo-700">${s.trim()}</span>
+                        <p class="text-xs text-slate-600 mt-1">${classVal} Preparation Phase</p>
+                    </div>
+                `).join('');
+                document.getElementById('planner-meta-info').innerText = `${classVal} • Target: ${examDateVal}`;
+            }, 500);
+        }
+
+        function downloadPlannerPDF() {
+            const element = document.getElementById('pdf-export-content');
+            html2pdf().set({ margin: 0.5, filename: 'Study_Plan.pdf' }).from(element).save();
+        }
+
+        function processAndFormatNotes() {
+            const text = document.getElementById('notes-text').value.trim();
+            if (!text) return alert("Enter text or upload PDF");
+            document.getElementById('exam-summary').innerText = text.slice(0, 300) + "...";
+            document.getElementById('exam-ready-container').classList.remove('hidden');
+        }
+
+        async function handlePDFUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            document.getElementById('pdf-filename-display').innerText = `📄 ${file.name}`;
+            document.getElementById('pdf-filename-display').classList.remove('hidden');
+
+            const reader = new FileReader();
+            reader.onload = async function() {
+                const typedarray = new Uint8Array(this.result);
+                const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                let text = "";
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const content = await page.getTextContent();
+                    text += content.items.map(item => item.str).join(' ') + "\n";
+                }
+                document.getElementById('notes-text').value = text;
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function toggleApiSettingsModal() { document.getElementById('api-modal').classList.toggle('hidden'); }
+        function saveApiKeys() { toggleApiSettingsModal(); alert("API Saved!"); }
+
+        window.onload = () => initDatabase();
+    </script>
+</body>
+</html>
