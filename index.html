@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gram Shiksha Tech | 3D Innovation Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Three.js CDN for 3D Graphics -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.82);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased relative min-h-screen selection:bg-indigo-500 selection:text-white">
+
+    <!-- 3D Canvas Background Container -->
+    <div id="canvas-container"></div>
+
+    <!-- Navigation Header with Official Vector Logo -->
+    <header class="sticky top-0 z-50 glass-card border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+            
+            <!-- Official Vector Logo Integration -->
+            <div class="flex items-center space-x-3 cursor-pointer group" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <div class="w-10 h-10 rounded-xl bg-indigo-950/80 border border-indigo-500/40 flex items-center justify-center shadow-lg group-hover:border-indigo-400 transition">
+                    <svg class="w-7 h-7 text-indigo-300" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10 70 C 30 65, 45 75, 50 85 C 55 75, 70 65, 90 70 L 90 35 C 70 30, 55 40, 50 50 C 45 40, 30 30, 10 35 Z" fill="rgba(99, 102, 241, 0.15)"/>
+                        <line x1="50" y1="85" x2="50" y2="25" stroke-width="5"/>
+                        <line x1="50" y1="45" x2="32" y2="30" stroke-width="4"/>
+                        <line x1="50" y1="35" x2="68" y2="30" stroke-width="4"/>
+                        <circle cx="50" cy="20" r="4" fill="currentColor"/>
+                        <circle cx="32" cy="27" r="3.5" fill="currentColor"/>
+                        <circle cx="68" cy="27" r="3.5" fill="currentColor"/>
+                    </svg>
+                </div>
+                <div>
+                    <span class="font-extrabold text-sm tracking-wide block leading-tight text-white">Gram Shiksha</span>
+                    <span class="text-amber-400 font-bold text-xs tracking-widest uppercase block">Tech</span>
+                </div>
+            </div>
+
+            <nav class="hidden md:flex space-x-8 text-sm font-medium text-slate-300">
+                <a href="#about" class="hover:text-amber-400 transition">About</a>
+                <a href="#timeline" class="hover:text-amber-400 transition">1-Year History & Systems</a>
+                <a href="#ai-platform" class="hover:text-amber-400 transition">AI Modules</a>
+                <a href="#contact" class="hover:text-amber-400 transition">Contact</a>
+            </nav>
+
+            <a href="file:///C:/Users/ASUS/Desktop/APP.html" target="_blank" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-indigo-500/25 transition border border-indigo-400/30 flex items-center space-x-2">
+                <i class="fa-solid fa-rocket animate-bounce text-amber-300"></i>
+                <span>Current Prototype</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-6 space-y-24 py-12">
+
+        <!-- Hero Section -->
+        <section id="about" class="text-center py-16 space-y-6">
+            <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full glass-card text-xs text-amber-300 border border-amber-400/20 shadow-inner mb-4">
+                <span class="flex h-2 w-2 rounded-full bg-amber-400 animate-ping"></span>
+                <span>Pioneering Digital Education & Infrastructure in Varanasi</span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-black tracking-tight text-white max-w-4xl mx-auto leading-tight">
+                Empowering Rural & Modern Classrooms Through <span class="bg-gradient-to-r from-indigo-400 via-amber-300 to-purple-400 bg-clip-text text-transparent">Smart Automation & AI</span>
+            </h1>
+            <p class="text-slate-400 max-w-2xl mx-auto text-base md:text-lg">
+                Founded by <strong>Gaurav Sharma</strong>[cite: 1], <strong>Gram Shiksha Tech</strong>[cite: 1] bridges traditional learning environments with cutting-edge engineering—evolving from rapid attendance management infrastructure to fully adaptive artificial intelligence learning platforms.
+            </p>
+
+            <div class="flex flex-wrap justify-center gap-4 pt-4">
+                <a href="file:///C:/Users/ASUS/Desktop/APP.html" target="_blank" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-sm px-7 py-3.5 rounded-xl transition shadow-lg shadow-amber-400/20 flex items-center space-x-2">
+                    <i class="fa-solid fa-laptop-code"></i>
+                    <span>Launch Current AI Prototype</span>
+                </a>
+                <a href="#timeline" class="glass-card hover:bg-slate-800 text-white font-bold text-sm px-7 py-3.5 rounded-xl transition border border-slate-700 flex items-center space-x-2">
+                    <i class="fa-solid fa-timeline text-indigo-400"></i>
+                    <span>Review 1-Year Systems</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Deep Dive: 1-Year Projects & Expanded Technical Information -->
+        <section id="timeline" class="space-y-16">
+            <div class="text-center space-y-2">
+                <h2 class="text-2xl md:text-4xl font-extrabold text-white">Our 1-Year Technical Evolution</h2>
+                <p class="text-xs md:text-sm text-slate-400">Comprehensive breakdown of our major core software solutions deployed over the past year</p>
+            </div>
+
+            <!-- Project 1: QR Based Attendance System -->
+            <div class="glass-card p-8 md:p-10 rounded-3xl relative overflow-hidden border border-indigo-500/30 space-y-8">
+                <div class="absolute -top-16 -right-16 w-48 h-48 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-6">
+                    <div>
+                        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 inline-block mb-3">1 Year Ago Milestone</span>
+                        <h3 class="text-2xl md:text-3xl font-black text-white">QR-Based Attendance & School Management System</h3>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-2xl flex-shrink-0 border border-indigo-500/30">
+                        <i class="fa-solid fa-qrcode"></i>
+                    </div>
+                </div>
+
+                <p class="text-slate-300 text-sm md:text-base leading-relaxed">
+                    Designed and built to completely eliminate manual register keeping and proxy entries in schools. This institutional utility streamlined day-to-day operations by issuing unique secure QR identification tags to every student, turning roll-call into a frictionless digital event.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+                    <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-800">
+                        <div class="text-indigo-400 font-bold text-sm mb-2 flex items-center space-x-2">
+                            <i class="fa-solid fa-bolt"></i>
+                            <span>Rapid Contactless Scanning</span>
+                        </div>
+                        <p class="text-slate-400 text-xs leading-relaxed">
+                            Uses camera-based web or mobile scanner modules to instantly decode encrypted student attendance markers in under 0.5 seconds per head.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-800">
+                        <div class="text-indigo-400 font-bold text-sm mb-2 flex items-center space-x-2">
+                            <i class="fa-solid fa-database"></i>
+                            <span>Automated Daily Logs</span>
+                        </div>
+                        <p class="text-slate-400 text-xs leading-relaxed">
+                            Instantly records timestamp, attendance status (Present/Absent/Late), and class identifiers directly to a centralized local database storage ledger.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-800">
+                        <div class="text-indigo-400 font-bold text-sm mb-2 flex items-center space-x-2">
+                            <i class="fa-solid fa-chart-pie"></i>
+                            <span>Administrative Insights</span>
+                        </div>
+                        <p class="text-slate-400 text-xs leading-relaxed">
+                            Generates instant monthly percentage summaries, notifies parents or school admins regarding chronic absenteeism, and exports reports easily.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 2: AI Learning Platform -->
+            <div class="glass-card p-8 md:p-10 rounded-3xl relative overflow-hidden border border-amber-500/40 space-y-8">
+                <div class="absolute -top-16 -right-16 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-6">
+                    <div>
+                        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 inline-block mb-3">Current Flagship Milestone</span>
+                        <h3 class="text-2xl md:text-3xl font-black text-white">AI Learning Platform & Cognitive Engine</h3>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl flex-shrink-0 border border-amber-500/30">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                </div>
+
+                <p class="text-slate-300 text-sm md:text-base leading-relaxed">
+                    Our current state-of-the-art educational application designed to simulate personal tutoring at scale. It incorporates speech processing, dynamic doubt resolution, custom PDF study notes parsing, and local browser persistence.
+                </p>
+
+                <div class="pt-2">
+                    <a href="file:///C:/Users/ASUS/Desktop/APP.html" target="_blank" class="inline-flex items-center space-x-3 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-sm px-8 py-4 rounded-xl shadow-lg shadow-amber-400/20 transition">
+                        <i class="fa-solid fa-rocket"></i>
+                        <span>Launch Live Prototype (`APP.html`)</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detailed 7 AI Platform Pillars -->
+        <section id="ai-platform" class="space-y-10">
+            <div class="text-center space-y-2">
+                <h2 class="text-2xl md:text-4xl font-extrabold text-white">AI Learning Platform Core Modules</h2>
+                <p class="text-slate-400 text-sm max-w-xl mx-auto">Full breakdown of the 7 pillars powering our intelligent study ecosystem.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-2xl hover:border-indigo-500/50 transition flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xl mb-4 border border-indigo-500/30">
+                            <i class="fa-solid fa-route"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-white mb-2">AI Personalized Learning</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed">Creates an adaptive learning path based on student performance.</p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl hover:border-indigo-500/50 transition flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-xl mb-4 border border-purple-500/30">
+                            <i class="fa-solid fa-comments"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-white mb-2">AI Doubt Solver</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed">Provides instant explanations and academic assistance.</p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl hover:border-indigo-500/50 transition flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl mb-4 border border-amber-500/30">
+                            <i class="fa-solid fa-list-check"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-white mb-2">Smart Assessments</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed">Generates quizzes and evaluates student understanding.</p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl hover:border-indigo-500/50 transition flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-xl mb-4 border border-rose-500/30">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-white mb-2">Weak-Area Detection</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed">Identifies topics where the student needs improvement.</p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl hover:border-indigo-500/50 transition flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl mb-4 border border-emerald-500/30">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-white mb-2">Progress Analytics</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed">Tracks learning progress and provides actionable insights.</p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl hover:border-indigo-500/50 transition flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xl mb-4 border border-cyan-500/30">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-white mb-2">Teacher Dashboard</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed">Helps teachers monitor students and identify those requiring additional support.</p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl hover:border-indigo-500/50 transition md:col-span-2 lg:col-span-3">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center text-xl flex-shrink-0 border border-indigo-500/30">
+                            <i class="fa-solid fa-universal-access"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-white mb-1">Accessible Learning</h3>
+                            <p class="text-slate-400 text-xs leading-relaxed">Provides learning resources anytime and at the student's own pace.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Founder & Contact Details -->
+        <section id="contact" class="space-y-8">
+            <div class="text-center space-y-2">
+                <h2 class="text-2xl md:text-3xl font-extrabold text-white">Founder & Contact Information</h2>
+                <p class="text-xs md:text-sm text-slate-400">Get in touch with Gram Shiksha Tech</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Founder Card -->
+                <div class="glass-card p-6 rounded-2xl text-center space-y-3">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-indigo-500 to-amber-400 mx-auto flex items-center justify-center text-2xl font-black text-slate-950 shadow-md">
+                        GS
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg text-white">Gaurav Sharma[cite: 1]</h3>
+                        <p class="text-xs text-amber-400 font-semibold">Founder, Gram Shiksha Tech[cite: 1]</p>
+                    </div>
+                </div>
+
+                <!-- Email Card -->
+                <div class="glass-card p-6 rounded-2xl text-center space-y-3 flex flex-col justify-center items-center">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xl border border-indigo-500/30">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xs text-slate-400 font-semibold uppercase">Email Us</h4>
+                        <a href="mailto:gramshikshatech@gmail.com" class="font-bold text-sm text-indigo-300 hover:underline">gramshikshatech@gmail.com</a>
+                    </div>
+                </div>
+
+                <!-- Office Address Card -->
+                <div class="glass-card p-6 rounded-2xl text-center space-y-3 flex flex-col justify-center items-center">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl border border-amber-500/30">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xs text-slate-400 font-semibold uppercase mb-1">Office Location</h4>
+                        <p class="font-bold text-xs text-white leading-relaxed">Near L1 coaching, Manas Nagar Colony, Durgakund extension, Naria, Varanasi</p>
+                        <p class="text-xs text-amber-300 font-medium mt-1">Uttar Pradesh - 221005</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-card border-t border-slate-800 py-8 text-center text-xs text-slate-500">
+        <p>© 2026 Gram Shiksha Tech[cite: 1]. All rights reserved. | Founded by Gaurav Sharma[cite: 1]</p>
+    </footer>
+
+    <!-- Three.js 3D Interactive Background Script -->
+    <script>
+        const container = document.getElementById('canvas-container');
+
+        // Scene Setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 30;
+
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        // Particle Constellation Geometry
+        const particlesCount = 350;
+        const posArray = new Float32Array(particlesCount * 3);
+
+        for (let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 80;
+        }
+
+        const particlesGeometry = new THREE.BufferGeometry();
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+        // Particle Material
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.25,
+            color: 0x6366f1,
+            transparent: true,
+            opacity: 0.8
+        });
+
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        // Wireframe Icosahedron 3D Object
+        const icoGeometry = new THREE.IcosahedronGeometry(12, 1);
+        const icoMaterial = new THREE.MeshBasicMaterial({
+            color: 0xf59e0b,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.12
+        });
+        const icoMesh = new THREE.Mesh(icoGeometry, icoMaterial);
+        scene.add(icoMesh);
+
+        // Mouse Parallax Interaction
+        let mouseX = 0;
+        let mouseY = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) - 0.5;
+            mouseY = (e.clientY / window.innerHeight) - 0.5;
+        });
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            particlesMesh.rotation.y += 0.001;
+            particlesMesh.rotation.x += 0.0005;
+
+            icoMesh.rotation.x += 0.002;
+            icoMesh.rotation.y += 0.003;
+
+            camera.position.x += (mouseX * 5 - camera.position.x) * 0.05;
+            camera.position.y += (-mouseY * 5 - camera.position.y) * 0.05;
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Responsive Window Resize Handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
